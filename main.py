@@ -3,7 +3,6 @@ import os
 import time
 import datetime
 from nseindia import NseIndia
-from tabulate import tabulate
 
 # data = nse_data.get_oi_spurt()
 # if data is not None:
