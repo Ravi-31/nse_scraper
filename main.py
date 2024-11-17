@@ -3,22 +3,7 @@ import os
 import time
 import datetime
 from nseindia import NseIndia
-
-# data = nse_data.get_oi_spurt()
-# if data is not None:
-#     data = data["data"]
-# print(json.dumps(data, indent=2))
-# if data:
-#     headers = data[0].keys()  # Get headers dynamically from the first entry
-#     table = tabulate(data, headers="keys", tablefmt="fancy_grid")
-#     print(table)
-
-# premarket_data = nse_data.get_pre_martket()
-# if premarket_data is not None:
-#     print(json.dumps(premarket_data, indent=2))
-
-# market_status = nse_data.is_market_open()
-# print(market_status)
+from temp import highlight_diff
 
 
 def write_to_file(data, filename="output.json"):
@@ -40,7 +25,7 @@ def write_to_file(data, filename="output.json"):
 
 def main():
     nse_india = NseIndia()
-    start_time = datetime.time(9, 30)  # Start time: 9:30 AM
+    start_time = datetime.time(9, 00)  # Start time: 9:30 AM
     end_time = datetime.time(15, 40)  # End time: 3:40 PM
     filename = "output.json"
     checked_date = None  # Store the last date the market status was checked
@@ -51,6 +36,7 @@ def main():
         json_data = {}
         now = datetime.datetime.now()
         current_date = now.date()
+        # print(current_date, now.time(), type(start_time))
 
         # Check market status only once per day
         if current_date != checked_date:
@@ -61,7 +47,9 @@ def main():
                     f"Market is closed on {current_date}. Waiting for the next day..."
                 )
                 while current_date == datetime.datetime.now().date():
-                    time.sleep(60)  # Wait 1 minute before checking the date again
+                    print("sleeping 1m")
+                    time.sleep(40)  # Wait 1 minute before checking the date again
+
                 continue  # Recheck the market status the next day
 
         # Proceed with capturing data if the market is open and within trading hours
@@ -70,15 +58,21 @@ def main():
             # get data using desired method
             pre_market_fo_stocks_data = nse_india.get_pre_martket()
             fo_stocks_data = nse_india.get_fo_stocks_data()
+            for i in pre_market_fo_stocks_data["data"]:
+                del i["metadata"]["purpose"]
 
             # make the data none if it was equal to previously fetched data
             if pre_market_fo_stocks_data == prev_pre_market_fo_stocks_data:
                 pre_market_fo_stocks_data = None
             else:
+                highlight_diff(
+                    prev_pre_market_fo_stocks_data, pre_market_fo_stocks_data
+                )
                 prev_pre_market_fo_stocks_data = pre_market_fo_stocks_data
             if fo_stocks_data == prev_fo_stocks_data:
                 prev_fo_stocks_data = None
             else:
+                highlight_diff(prev_fo_stocks_data, fo_stocks_data)
                 prev_fo_stocks_data = fo_stocks_data
 
             json_data["timestamp"] = now.strftime("%Y-%m-%d %H:%M:%S")  # Add timestamp
@@ -90,13 +84,15 @@ def main():
 
             # Check if the data is the same as the last captured data
             write_to_file(json_data, filename)
-            time.sleep(60)  # Wait 1 minute before capturing again
+            print("sleeping 1m")
+            time.sleep(40)  # Wait 1 minute before capturing again
 
         elif current_time > end_time:
             # Wait until the next day's start time
             print("End time reached. Waiting for the next day...")
             while current_date == datetime.datetime.now().date():
-                time.sleep(60)  # Wait 1 minute before checking the date again
+                print("sleeping 1m")
+                time.sleep(40)  # Wait 1 minute before checking the date again
 
 
 if __name__ == "__main__":
