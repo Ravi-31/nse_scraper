@@ -150,3 +150,9 @@ class NseIndia:
         # If no holiday and not a weekend, the market is open
         # print("FNO Market is open today. Have a Nice Trade!")
         return True
+
+
+# nse = NseIndia()
+# data = nse.get_oi_spurt()
+# import json
+# print(json.dumps(data, indent=2))
