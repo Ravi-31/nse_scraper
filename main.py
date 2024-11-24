@@ -134,7 +134,7 @@ def print_data(json_data, prev_fo_stocks_data, prev_fo_spurt):
         )
         print("\nPremarket\n")
         for i, item in enumerate(filtered_sorted_data):
-            print(f"{i}. {item['metadata']['symbol']} - pChange: {item['metadata']['pChange']:.2f}")
+            print(f"{i+1}. {item['metadata']['symbol']} - pChange: {item['metadata']['pChange']:.2f}")
 
     print("\n" * 2)
 
@@ -183,11 +183,11 @@ def print_data(json_data, prev_fo_stocks_data, prev_fo_spurt):
             pChange = item['pChange']
 
             if symbol in common_symbols and symbol in negative_common_symbols:
-                print(f"{i}. {print_symbol_in_red(symbol)} => {pChange:.2f}%")
+                print(f"{i+1}. {print_symbol_in_red(symbol)} => {pChange:.2f}%")
             elif symbol in common_symbols:
-                print(f"{i}. {print_symbol_in_green(symbol)} => {pChange:.2f}%")
+                print(f"{i+1}. {print_symbol_in_green(symbol)} => {pChange:.2f}%")
             else:
-                print(f"{i}. {symbol} => {pChange:.2f}%")
+                print(f"{i+1}. {symbol} => {pChange:.2f}%")
 
     # Print FO OI Spurt Movers, making only common negative symbols red
     if fo is not None:
@@ -197,11 +197,11 @@ def print_data(json_data, prev_fo_stocks_data, prev_fo_spurt):
             avgInOI = item['avgInOI']
 
             if symbol in common_symbols and symbol in negative_common_symbols:
-                print(f"{i}. {print_symbol_in_red(symbol)} => avgInOI: {avgInOI:.2f}%")
+                print(f"{i+1}. {print_symbol_in_red(symbol)} => avgInOI: {avgInOI:.2f}%")
             elif symbol in common_symbols:
-                print(f"{i}. {print_symbol_in_green(symbol)} => avgInOI: {avgInOI:.2f}%")
+                print(f"{i+1}. {print_symbol_in_green(symbol)} => avgInOI: {avgInOI:.2f}%")
             else:
-                print(f"{i}. {symbol} => avgInOI: {avgInOI:.2f}%")
+                print(f"{i+1}. {symbol} => avgInOI: {avgInOI:.2f}%")
 
     print()
         
